@@ -19,7 +19,7 @@ export const Button = styled.button`
   background-color: ${({ theme }) => theme.colors.blueLight};
   border: 0;
   padding: 0rem 2rem;
-  border-radius: 0.25rem;
+  border-radius: ${({ theme }) => theme.borderRadius};
   height: 3rem;
 
   transition: filter 0.3s ease;

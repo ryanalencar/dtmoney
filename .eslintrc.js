@@ -27,6 +27,8 @@ module.exports = {
     'unused-imports'
   ],
   rules: {
+    'implicit-arrow-linebreak': 'off',
+    'no-confusing-arrow': 'off',
     'consistent-return': 'off',
     'react/jsx-filename-extension': [
       'warn',
