@@ -1,7 +1,9 @@
-import logoImg from "../../assets/logo.svg";
-import * as S from "./styles";
+import React from 'react';
 
-const Header: React.FC = () => {
+import logoImg from '../../assets/logo.svg';
+import * as S from './styles';
+
+export default function Header() {
   return (
     <S.Container>
       <S.Content>
@@ -10,6 +12,4 @@ const Header: React.FC = () => {
       </S.Content>
     </S.Container>
   );
-};
-
-export default Header;
+}
