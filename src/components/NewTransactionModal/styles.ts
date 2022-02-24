@@ -1,3 +1,43 @@
 import styled from 'styled-components';
 
 export const FormContainer = styled.form``;
+
+export const FormInput = styled.input`
+  width: 100%;
+  padding: 0 1.5rem;
+  height: 4rem;
+
+  border: 1px solid ${({ theme }) => theme.colors.inputBorder};
+  border-radius: ${({ theme }) => theme.borderRadius};
+  background: ${({ theme }) => theme.colors.inputBackground};
+
+  font-weight: 400;
+  font-size: 1rem;
+
+  &::placeholder {
+    color: ${({ theme }) => theme.colors.textBody};
+  }
+
+  & + input {
+    margin-top: 1rem;
+  }
+`;
+
+export const FormSubmitButton = styled.button`
+  width: 100%;
+  padding: 0 1.5rem;
+  height: 4rem;
+  background-color: ${({ theme }) => theme.colors.green};
+  border: 0;
+  margin-top: 1.5rem;
+
+  color: ${({ theme }) => theme.colors.text};
+  font-size: 1rem;
+  font-weight: 600;
+
+  transition: filter ease 0.3s;
+
+  &:hover {
+    filter: brightness(0.9);
+  }
+`;

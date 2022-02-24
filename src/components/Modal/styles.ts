@@ -25,3 +25,25 @@ export const Modal = styled(ReactModal).attrs(({ theme }) => ({
     },
   },
 }))``;
+
+export const ModalTitle = styled.h2`
+  color: ${({ theme }) => theme.colors.textTitle};
+  font-size: 1.5rem;
+  margin-bottom: 2rem;
+`;
+
+export const ModalCloseButton = styled.button`
+  position: absolute;
+  right: 1.5rem;
+  top: 1.5rem;
+
+  border: 0;
+  background: transparent;
+
+  transition: all ease 0.3s;
+
+  &:hover {
+    filter: brightness(0.7);
+    transform: scale(1.02);
+  }
+`;

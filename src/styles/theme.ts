@@ -9,6 +9,8 @@ interface ITheme {
     text: string;
     textTitle: string;
     textBody: string;
+    inputBorder: string;
+    inputBackground: string;
     shape: string;
   };
   borderRadius: string;
@@ -25,6 +27,8 @@ export const theme: ITheme = {
     text: '#FFFFFF',
     textTitle: '#363F5F',
     textBody: '#969CB3',
+    inputBorder: '#d7d7d7',
+    inputBackground: '#e7e9ee',
     shape: '#FFFFFF',
   },
   borderRadius: '0.25rem',
