@@ -1,3 +1,4 @@
+import { darken } from 'polished';
 import styled from 'styled-components';
 
 export const FormContainer = styled.form``;
@@ -39,5 +40,42 @@ export const FormSubmitButton = styled.button`
 
   &:hover {
     filter: brightness(0.9);
+  }
+`;
+
+export const TransactionTypeWrapper = styled.div`
+  margin: 1rem 0;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.5rem;
+`;
+
+export const TransactionTypeButton = styled.button`
+  height: 4rem;
+  border: 1px solid ${({ theme }) => theme.colors.inputBorder};
+  border-radius: ${({ theme }) => theme.borderRadius};
+
+  background: transparent;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  transition: all 0.3s ease;
+
+  &:hover {
+    border-color: ${({ theme }) => darken(0.2, theme.colors.inputBorder)};
+  }
+
+  img {
+    width: 25px;
+    height: 25px;
+  }
+
+  span {
+    display: inline-block;
+    margin-left: 1rem;
+    font-size: 1rem;
+    color: ${({ theme }) => theme.colors.textTitle};
   }
 `;
