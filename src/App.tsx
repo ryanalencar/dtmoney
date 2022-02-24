@@ -6,6 +6,7 @@ import { ThemeProvider } from 'styled-components';
 
 import Dashboard from './components/Dashboard';
 import Header from './components/Header';
+import NewTransitionModal from './components/NewTransactionModal';
 import { GlobalStyle } from './styles/global';
 import { theme } from './styles/theme';
 
@@ -39,11 +40,10 @@ export default function App() {
     <ThemeProvider theme={theme}>
       <Header onTransactionModalStatus={handleTransactionModalStatus} />
       <Dashboard />
-      <Modal
+      <NewTransitionModal
+        isOpen={isTransactioModalOpen}
         onRequestClose={handleTransactionModalStatus}
-        isOpen={isTransactioModalOpen}>
-        <h2>Cadastrar Transação</h2>
-      </Modal>
+      />
       <GlobalStyle />
     </ThemeProvider>
   );
