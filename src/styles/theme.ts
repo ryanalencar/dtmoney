@@ -1,6 +1,7 @@
 interface ITheme {
   colors: {
     background: string;
+    backgroundModal: string;
     red: string;
     blue: string;
     green: string;
@@ -16,6 +17,7 @@ interface ITheme {
 export const theme: ITheme = {
   colors: {
     background: '#F0F2F5',
+    backgroundModal: '#00000080',
     red: '#E52E4D',
     green: '#33CC95',
     blue: '#5429CC',
