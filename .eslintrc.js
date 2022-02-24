@@ -27,6 +27,8 @@ module.exports = {
     'unused-imports'
   ],
   rules: {
+    'react/jsx-closing-bracket-location': 'off',
+    'react/jsx-no-bind': 'off',
     'implicit-arrow-linebreak': 'off',
     'no-confusing-arrow': 'off',
     'consistent-return': 'off',

@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import { createServer } from 'miragejs';
+import Modal from 'react-modal';
 import { ThemeProvider } from 'styled-components';
 
 import Dashboard from './components/Dashboard';
@@ -24,11 +25,25 @@ createServer({
   },
 });
 
+Modal.setAppElement('#root');
+
 export default function App() {
+  const [isTransactioModalOpen, setIsTransactioModalOpen] = useState(false);
+
+  function handleTransactionModalStatus() {
+    if (isTransactioModalOpen) setIsTransactioModalOpen(false);
+    else setIsTransactioModalOpen(true);
+  }
+
   return (
     <ThemeProvider theme={theme}>
-      <Header />
+      <Header onTransactionModalStatus={handleTransactionModalStatus} />
       <Dashboard />
+      <Modal
+        onRequestClose={handleTransactionModalStatus}
+        isOpen={isTransactioModalOpen}>
+        <h2>Cadastrar Transação</h2>
+      </Modal>
       <GlobalStyle />
     </ThemeProvider>
   );
