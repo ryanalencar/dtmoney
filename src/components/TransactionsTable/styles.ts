@@ -17,19 +17,26 @@ export const TableTheadItem = styled.th`
   line-height: 1.5rem;
 `;
 
-export const TableTbodyItem = styled.td<{ value?: number }>`
+export const TableTbodyItem = styled.td<{ type?: 'deposit' | 'withdraw' }>`
   padding: 1rem 2rem;
   border: 0;
   background-color: ${({ theme }) => theme.colors.shape};
-  ${({ theme, value }) =>
-    value
-      ? css`
-          color: ${theme.colors.red || theme.colors.green};
-        `
-      : css`
-          color: ${theme.colors.textBody};
-        `};
   border-radius: ${({ theme }) => theme.borderRadius};
+  ${({ theme, type }) => {
+    if (type) {
+      if (type === 'withdraw') {
+        return css`
+          color: ${theme.colors.red};
+        `;
+      }
+      return css`
+        color: ${theme.colors.green};
+      `;
+    }
+    return css`
+      color: ${theme.colors.textBody};
+    `;
+  }};
 
   &:first-child {
     color: ${({ theme }) => theme.colors.textTitle};

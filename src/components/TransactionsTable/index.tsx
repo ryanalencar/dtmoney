@@ -6,7 +6,7 @@ import * as S from './styles';
 interface ITransaction {
   id: number;
   title: string;
-  type: string;
+  type: 'deposit' | 'withdraw';
   category: string;
   amount: number;
   createdAt: Date;
@@ -14,14 +14,12 @@ interface ITransaction {
 
 export default function TransactionsTable() {
   const [transactions, setTransactions] = useState<ITransaction[]>([]);
-
+  const { locale } = Intl.DateTimeFormat().resolvedOptions();
   useEffect(() => {
     api
       .get('transactions')
       .then((res) => setTransactions(res.data.transactions));
   }, []);
-
-  console.log(transactions);
 
   return (
     <S.Container>
@@ -39,9 +37,16 @@ export default function TransactionsTable() {
             ({ id, amount, category, createdAt, title, type }) => (
               <tr key={id}>
                 <S.TableTbodyItem>{title}</S.TableTbodyItem>
-                <S.TableTbodyItem>{amount}</S.TableTbodyItem>
+                <S.TableTbodyItem type={type}>
+                  {new Intl.NumberFormat(locale, {
+                    style: 'currency',
+                    currency: locale === 'pt-BR' ? 'BRL' : 'USD',
+                  }).format(amount)}
+                </S.TableTbodyItem>
                 <S.TableTbodyItem>{category}</S.TableTbodyItem>
-                <S.TableTbodyItem>{createdAt}</S.TableTbodyItem>
+                <S.TableTbodyItem>
+                  {new Intl.DateTimeFormat().format(new Date(createdAt))}
+                </S.TableTbodyItem>
               </tr>
             ),
           )}
