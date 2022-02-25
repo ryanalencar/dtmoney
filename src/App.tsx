@@ -7,6 +7,7 @@ import { ThemeProvider } from 'styled-components';
 import Dashboard from './components/Dashboard';
 import Header from './components/Header';
 import NewTransitionModal from './components/NewTransactionModal';
+import TransactionProvider from './contexts/TransactionContext';
 import { GlobalStyle } from './styles/global';
 import { theme } from './styles/theme';
 
@@ -58,13 +59,15 @@ export default function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Header onTransactionModalStatus={handleTransactionModalStatus} />
-      <Dashboard />
-      <NewTransitionModal
-        isOpen={isTransactioModalOpen}
-        onRequestClose={handleTransactionModalStatus}
-      />
-      <GlobalStyle />
+      <TransactionProvider>
+        <Header onTransactionModalStatus={handleTransactionModalStatus} />
+        <Dashboard />
+        <NewTransitionModal
+          isOpen={isTransactioModalOpen}
+          onRequestClose={handleTransactionModalStatus}
+        />
+        <GlobalStyle />
+      </TransactionProvider>
     </ThemeProvider>
   );
 }
