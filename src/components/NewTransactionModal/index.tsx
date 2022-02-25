@@ -4,6 +4,7 @@ import { useTheme } from 'styled-components';
 
 import incomeImg from '../../assets/income.svg';
 import outcomeImg from '../../assets/outcome.svg';
+import { api } from '../../services/api';
 import Modal from '../Modal';
 import * as S from './styles';
 import { INewTransitionModalProps, TransactionType } from './types';
@@ -35,7 +36,7 @@ export default function NewTransitionModal({
       transactionType,
       category,
     };
-    console.log(formData);
+    api.post('/transactions', formData);
   };
 
   return (
