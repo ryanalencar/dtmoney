@@ -1,4 +1,4 @@
-import React, { MouseEvent, useState } from 'react';
+import React, { FormEvent, MouseEvent, useState } from 'react';
 
 import { useTheme } from 'styled-components';
 
@@ -15,6 +15,9 @@ export default function NewTransitionModal({
   const theme = useTheme();
   const [transactionType, setTransactionType] =
     useState<TransactionType>('deposit');
+  const [title, setTitle] = useState('');
+  const [value, setValue] = useState(0);
+  const [category, setCategory] = useState('');
 
   const handleTransactionTypeChange = (
     e: MouseEvent,
@@ -24,14 +27,35 @@ export default function NewTransitionModal({
     setTransactionType(type);
   };
 
+  const handleCreateNewTransaction = (e: FormEvent) => {
+    e.preventDefault();
+    const formData = {
+      title,
+      value,
+      transactionType,
+      category,
+    };
+    console.log(formData);
+  };
+
   return (
     <Modal
       title="Cadastrar Transação"
       onRequestClose={onRequestClose}
       isOpen={isOpen}>
-      <S.FormContainer>
-        <S.FormInput type="text" placeholder="Título" />
-        <S.FormInput type="number" placeholder="Valor" />
+      <S.FormContainer onSubmit={handleCreateNewTransaction}>
+        <S.FormInput
+          type="text"
+          placeholder="Título"
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+        />
+        <S.FormInput
+          type="number"
+          placeholder="Valor"
+          value={value}
+          onChange={(e) => setValue(Number(e.target.value))}
+        />
         <S.TransactionTypeWrapper>
           <S.TransactionTypeButton
             onClick={(e) => handleTransactionTypeChange(e, 'deposit')}
@@ -49,7 +73,12 @@ export default function NewTransitionModal({
           </S.TransactionTypeButton>
         </S.TransactionTypeWrapper>
 
-        <S.FormInput type="text" placeholder="Categoria" />
+        <S.FormInput
+          type="text"
+          placeholder="Categoria"
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+        />
 
         <S.FormSubmitButton type="submit">Cadastrar</S.FormSubmitButton>
       </S.FormContainer>
