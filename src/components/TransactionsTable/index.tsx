@@ -1,25 +1,11 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 
-import { api } from '../../services/api';
+import { TransactionContext } from '../../contexts/TransactionContext';
 import * as S from './styles';
 
-interface ITransaction {
-  id: number;
-  title: string;
-  type: 'deposit' | 'withdraw';
-  category: string;
-  amount: number;
-  createdAt: Date;
-}
-
 export default function TransactionsTable() {
-  const [transactions, setTransactions] = useState<ITransaction[]>([]);
+  const { transactions } = useContext(TransactionContext);
   const { locale } = Intl.DateTimeFormat().resolvedOptions();
-  useEffect(() => {
-    api
-      .get('transactions')
-      .then((res) => setTransactions(res.data.transactions));
-  }, []);
 
   return (
     <S.Container>

@@ -1,10 +1,10 @@
-import React, { FormEvent, MouseEvent, useState } from 'react';
+import React, { FormEvent, MouseEvent, useContext, useState } from 'react';
 
 import { useTheme } from 'styled-components';
 
 import incomeImg from '../../assets/income.svg';
 import outcomeImg from '../../assets/outcome.svg';
-import { api } from '../../services/api';
+import { TransactionContext } from '../../contexts/TransactionContext';
 import Modal from '../Modal';
 import * as S from './styles';
 import { INewTransitionModalProps, TransactionType } from './types';
@@ -13,30 +13,24 @@ export default function NewTransitionModal({
   isOpen,
   onRequestClose,
 }: INewTransitionModalProps) {
+  const { createTransaction } = useContext(TransactionContext);
   const theme = useTheme();
-  const [transactionType, setTransactionType] =
-    useState<TransactionType>('deposit');
+  const [type, setType] = useState<TransactionType>('deposit');
   const [title, setTitle] = useState('');
-  const [value, setValue] = useState(0);
+  const [amount, setAmount] = useState(0);
   const [category, setCategory] = useState('');
 
   const handleTransactionTypeChange = (
     e: MouseEvent,
-    type: TransactionType,
+    _type: TransactionType,
   ) => {
     e.preventDefault();
-    setTransactionType(type);
+    setType(_type);
   };
 
   const handleCreateNewTransaction = (e: FormEvent) => {
     e.preventDefault();
-    const formData = {
-      title,
-      value,
-      transactionType,
-      category,
-    };
-    api.post('/transactions', formData);
+    createTransaction({ amount, category, title, type });
   };
 
   return (
@@ -54,20 +48,20 @@ export default function NewTransitionModal({
         <S.FormInput
           type="number"
           placeholder="Valor"
-          value={value}
-          onChange={(e) => setValue(Number(e.target.value))}
+          value={amount}
+          onChange={(e) => setAmount(Number(e.target.value))}
         />
         <S.TransactionTypeWrapper>
           <S.TransactionTypeButton
             onClick={(e) => handleTransactionTypeChange(e, 'deposit')}
-            isActive={transactionType === 'deposit'}
+            isActive={type === 'deposit'}
             activeColor={theme.colors.green}>
             <img src={incomeImg} alt="Entrada" />
             <span>Entrada</span>
           </S.TransactionTypeButton>
           <S.TransactionTypeButton
             onClick={(e) => handleTransactionTypeChange(e, 'withdraw')}
-            isActive={transactionType === 'withdraw'}
+            isActive={type === 'withdraw'}
             activeColor={theme.colors.red}>
             <img src={outcomeImg} alt="Saída" />
             <span>Saída</span>
