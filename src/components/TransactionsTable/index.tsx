@@ -3,11 +3,22 @@ import React, { useEffect, useState } from 'react';
 import { api } from '../../services/api';
 import * as S from './styles';
 
+interface ITransaction {
+  id: number;
+  title: string;
+  type: string;
+  category: string;
+  amount: number;
+  createdAt: Date;
+}
+
 export default function TransactionsTable() {
-  const [transactions, setTransactions] = useState([]);
+  const [transactions, setTransactions] = useState<ITransaction[]>([]);
 
   useEffect(() => {
-    api.get('transactions').then((res) => setTransactions(res.data));
+    api
+      .get('transactions')
+      .then((res) => setTransactions(res.data.transactions));
   }, []);
 
   console.log(transactions);
@@ -24,18 +35,16 @@ export default function TransactionsTable() {
           </tr>
         </thead>
         <tbody>
-          <tr>
-            <S.TableTbodyItem>Desenvolvimento de website</S.TableTbodyItem>
-            <S.TableTbodyItem value={12000}>R$12.000</S.TableTbodyItem>
-            <S.TableTbodyItem>Desenvolvimento</S.TableTbodyItem>
-            <S.TableTbodyItem>23/02/2022</S.TableTbodyItem>
-          </tr>
-          <tr>
-            <S.TableTbodyItem>Aluguel</S.TableTbodyItem>
-            <S.TableTbodyItem>R$1540</S.TableTbodyItem>
-            <S.TableTbodyItem>Casa</S.TableTbodyItem>
-            <S.TableTbodyItem>23/02/2022</S.TableTbodyItem>
-          </tr>
+          {transactions?.map(
+            ({ id, amount, category, createdAt, title, type }) => (
+              <tr key={id}>
+                <S.TableTbodyItem>{title}</S.TableTbodyItem>
+                <S.TableTbodyItem>{amount}</S.TableTbodyItem>
+                <S.TableTbodyItem>{category}</S.TableTbodyItem>
+                <S.TableTbodyItem>{createdAt}</S.TableTbodyItem>
+              </tr>
+            ),
+          )}
         </tbody>
       </S.Table>
     </S.Container>
