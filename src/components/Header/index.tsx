@@ -1,11 +1,11 @@
-import React, { useContext } from 'react';
+import React from 'react';
 
 import logoImg from '../../assets/logo.svg';
-import { TransactionModalContext } from '../../contexts/TransactionModalContext';
+import { useModal } from '../../hooks/useModal';
 import * as S from './styles';
 
 export default function Header() {
-  const { toggleModal } = useContext(TransactionModalContext);
+  const { toggleModal } = useModal();
 
   return (
     <S.Container>

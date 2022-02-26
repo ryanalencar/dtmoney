@@ -1,16 +1,16 @@
-import React, { useContext } from 'react';
+import React from 'react';
 
 import { AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai';
 import { useTheme } from 'styled-components';
 
-import { TransactionModalContext } from '../../contexts/TransactionModalContext';
+import { useModal } from '../../hooks/useModal';
 import { useTransactions } from '../../hooks/useTransactions';
 import { formatPrice } from '../../utils/formatPrice';
 import * as S from './styles';
 
 export default function TransactionsTable() {
   const { transactions } = useTransactions();
-  const { toggleEditModal } = useContext(TransactionModalContext);
+  const { toggleEditModal } = useModal();
   const theme = useTheme();
 
   return (

@@ -1,27 +1,15 @@
-import React, { createContext, ReactNode, useMemo, useState } from 'react';
+import React, { createContext, useContext, useMemo, useState } from 'react';
 
-import { ITransaction } from '../../hooks/useTransactions/types';
+import { ITransaction } from '../useTransactions/types';
+import {
+  ITransacionModalProviderProps,
+  ITransactionModalContextData,
+  ModalData,
+} from './types';
 
-interface ITransacionModalProviderProps {
-  children: ReactNode;
-}
-
-interface ITransactionModalContextData {
-  isModalOpen: boolean;
-  modalData: ModalData;
-  toggleModal: () => void;
-  toggleEditModal: (data: ITransaction) => void;
-}
-
-interface ModalData {
-  isEditing: boolean;
-  data: ITransaction;
-}
-
-export const TransactionModalContext =
-  createContext<ITransactionModalContextData>(
-    {} as ITransactionModalContextData,
-  );
+const TransactionModalContext = createContext<ITransactionModalContextData>(
+  {} as ITransactionModalContextData,
+);
 
 export default function TransactionModalProvider({
   children,
@@ -54,4 +42,9 @@ export default function TransactionModalProvider({
       {children}
     </TransactionModalContext.Provider>
   );
+}
+
+export function useModal() {
+  const context = useContext(TransactionModalContext);
+  return context;
 }

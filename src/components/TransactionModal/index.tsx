@@ -1,16 +1,10 @@
-import React, {
-  FormEvent,
-  MouseEvent,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import React, { FormEvent, MouseEvent, useEffect, useState } from 'react';
 
 import { useTheme } from 'styled-components';
 
 import incomeImg from '../../assets/income.svg';
 import outcomeImg from '../../assets/outcome.svg';
-import { TransactionModalContext } from '../../contexts/TransactionModalContext';
+import { useModal } from '../../hooks/useModal';
 import { useTransactions } from '../../hooks/useTransactions';
 import Modal from '../Modal';
 import * as S from './styles';
@@ -18,9 +12,7 @@ import { TransactionType } from './types';
 
 export default function NewTransitionModal() {
   const { createTransaction, editTransaction } = useTransactions();
-  const { isModalOpen, toggleModal, modalData } = useContext(
-    TransactionModalContext,
-  );
+  const { isModalOpen, toggleModal, modalData } = useModal();
   const { isEditing, data } = modalData;
 
   const theme = useTheme();
