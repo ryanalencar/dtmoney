@@ -7,8 +7,8 @@ import { ThemeProvider } from 'styled-components';
 import Dashboard from './components/Dashboard';
 import Header from './components/Header';
 import NewTransitionModal from './components/TransactionModal';
-import TransactionProvider from './contexts/TransactionContext';
 import TransactionModalProvider from './contexts/TransactionModalContext';
+import TransactionProvider from './hooks/useTransactions';
 import { GlobalStyle } from './styles/global';
 import { theme } from './styles/theme';
 
@@ -44,6 +44,11 @@ createServer({
     this.post('/transactions', (schema, request) => {
       const data = JSON.parse(request.requestBody);
       return schema.create('transaction', data);
+    });
+    this.put('/transactions', (schema, request) => {
+      console.log(schema);
+      console.log(JSON.parse(request.requestBody));
+      return null;
     });
   },
 });

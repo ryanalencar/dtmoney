@@ -3,14 +3,14 @@ import React, { useContext } from 'react';
 import { AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai';
 import { useTheme } from 'styled-components';
 
-import { TransactionContext } from '../../contexts/TransactionContext';
 import { TransactionModalContext } from '../../contexts/TransactionModalContext';
+import { useTransactions } from '../../hooks/useTransactions';
 import { formatPrice } from '../../utils/formatPrice';
 import * as S from './styles';
 
 export default function TransactionsTable() {
-  const { transactions } = useContext(TransactionContext);
-  const { editTransactionModal } = useContext(TransactionModalContext);
+  const { transactions } = useTransactions();
+  const { toggleEditModal } = useContext(TransactionModalContext);
   const theme = useTheme();
 
   return (
@@ -44,7 +44,7 @@ export default function TransactionsTable() {
                       size={25}
                       color={theme.colors.blueLight}
                       onClick={() =>
-                        editTransactionModal({
+                        toggleEditModal({
                           id,
                           amount,
                           category,

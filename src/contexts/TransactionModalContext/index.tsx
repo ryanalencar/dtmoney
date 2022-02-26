@@ -1,6 +1,6 @@
 import React, { createContext, ReactNode, useMemo, useState } from 'react';
 
-import { ITransaction } from '../TransactionContext/types';
+import { ITransaction } from '../../hooks/useTransactions/types';
 
 interface ITransacionModalProviderProps {
   children: ReactNode;
@@ -8,13 +8,13 @@ interface ITransacionModalProviderProps {
 
 interface ITransactionModalContextData {
   isModalOpen: boolean;
-  editTransaction: EditingTransaction;
+  modalData: ModalData;
   toggleModal: () => void;
-  editTransactionModal: (data: ITransaction) => void;
+  toggleEditModal: (data: ITransaction) => void;
 }
 
-interface EditingTransaction {
-  status: boolean;
+interface ModalData {
+  isEditing: boolean;
   data: ITransaction;
 }
 
@@ -27,26 +27,26 @@ export default function TransactionModalProvider({
   children,
 }: ITransacionModalProviderProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [editTransaction, setEditTransaction] = useState<EditingTransaction>({
-    status: false,
+  const [modalData, setModalData] = useState<ModalData>({
+    isEditing: false,
     data: {} as ITransaction,
   });
 
   function toggleModal() {
     if (isModalOpen) {
       setIsModalOpen(false);
-      setEditTransaction({ status: false, data: {} as ITransaction });
+      setModalData({ isEditing: false, data: {} as ITransaction });
     } else setIsModalOpen(true);
   }
 
-  function editTransactionModal(data: ITransaction) {
+  function toggleEditModal(data: ITransaction) {
     toggleModal();
-    setEditTransaction({ status: true, data });
+    setModalData({ isEditing: true, data });
   }
 
   const providerValue = useMemo(
-    () => ({ isModalOpen, toggleModal, editTransactionModal, editTransaction }),
-    [isModalOpen, toggleModal, editTransactionModal, editTransaction],
+    () => ({ isModalOpen, toggleModal, toggleEditModal, modalData }),
+    [isModalOpen, toggleModal, toggleEditModal, modalData],
   );
 
   return (

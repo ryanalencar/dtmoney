@@ -1,4 +1,10 @@
-import React, { createContext, useEffect, useMemo, useState } from 'react';
+import React, {
+  createContext,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react';
 
 import { api } from '../../services/api';
 import {
@@ -8,7 +14,7 @@ import {
   TransactionInput,
 } from './types';
 
-export const TransactionContext = createContext<ItransactionContextData>(
+const TransactionContext = createContext<ItransactionContextData>(
   {} as ItransactionContextData,
 );
 
@@ -30,9 +36,13 @@ export default function TransactionProvider({
     setTransactions([...transactions, response.data.transaction]);
   }
 
+  async function editTransaction(transaction: TransactionInput) {
+    const response = await api.put('/transactions', transaction);
+  }
+
   const providerValue = useMemo(
-    () => ({ transactions, createTransaction }),
-    [transactions, createTransaction],
+    () => ({ transactions, createTransaction, editTransaction }),
+    [transactions, createTransaction, editTransaction],
   );
 
   return (
@@ -40,4 +50,9 @@ export default function TransactionProvider({
       {children}
     </TransactionContext.Provider>
   );
+}
+
+export function useTransactions() {
+  const context = useContext(TransactionContext);
+  return context;
 }

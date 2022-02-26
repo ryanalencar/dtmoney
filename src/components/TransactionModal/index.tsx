@@ -10,18 +10,18 @@ import { useTheme } from 'styled-components';
 
 import incomeImg from '../../assets/income.svg';
 import outcomeImg from '../../assets/outcome.svg';
-import { TransactionContext } from '../../contexts/TransactionContext';
 import { TransactionModalContext } from '../../contexts/TransactionModalContext';
+import { useTransactions } from '../../hooks/useTransactions';
 import Modal from '../Modal';
 import * as S from './styles';
 import { TransactionType } from './types';
 
 export default function NewTransitionModal() {
-  const { createTransaction } = useContext(TransactionContext);
-  const { isModalOpen, toggleModal, editTransaction } = useContext(
+  const { createTransaction, editTransaction } = useTransactions();
+  const { isModalOpen, toggleModal, modalData } = useContext(
     TransactionModalContext,
   );
-  const { status: isEditing, data } = editTransaction;
+  const { isEditing, data } = modalData;
 
   const theme = useTheme();
   const [type, setType] = useState<TransactionType>('deposit');
@@ -58,9 +58,10 @@ export default function NewTransitionModal() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (isEditing) {
-      console.log('isEditing');
+      await editTransaction({ amount, category, title, type });
+    } else {
+      await createTransaction({ amount, category, title, type });
     }
-    await createTransaction({ amount, category, title, type });
     toggleModal();
     resetModalData();
   };
