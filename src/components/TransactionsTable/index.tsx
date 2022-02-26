@@ -1,11 +1,11 @@
 import React, { useContext } from 'react';
 
 import { TransactionContext } from '../../contexts/TransactionContext';
+import { formatPrice } from '../../utils/formatPrice';
 import * as S from './styles';
 
 export default function TransactionsTable() {
   const { transactions } = useContext(TransactionContext);
-  const { locale } = Intl.DateTimeFormat().resolvedOptions();
 
   return (
     <S.Container>
@@ -25,10 +25,7 @@ export default function TransactionsTable() {
                 <S.TableTbodyItem>{title}</S.TableTbodyItem>
                 <S.TableTbodyItem type={type}>
                   {type === 'deposit' ? '+ ' : '- '}
-                  {new Intl.NumberFormat(locale, {
-                    style: 'currency',
-                    currency: locale === 'pt-BR' ? 'BRL' : 'USD',
-                  }).format(amount)}
+                  {formatPrice(amount)}
                 </S.TableTbodyItem>
                 <S.TableTbodyItem>{category}</S.TableTbodyItem>
                 <S.TableTbodyItem>
