@@ -40,9 +40,7 @@ export default function TransactionsTable() {
                 </S.TableTbodyItem>
                 <S.TableTbodyItem>
                   <S.TableTbodyActions>
-                    <AiOutlineEdit
-                      size={25}
-                      color={theme.colors.blueLight}
+                    <S.TableActionButton
                       onClick={() =>
                         toggleEditModal({
                           id,
@@ -52,9 +50,12 @@ export default function TransactionsTable() {
                           title,
                           type,
                         })
-                      }
-                    />
-                    <AiOutlineDelete size={25} color={theme.colors.red} />
+                      }>
+                      <AiOutlineEdit size={25} color={theme.colors.blueLight} />
+                    </S.TableActionButton>
+                    <S.TableActionButton>
+                      <AiOutlineDelete size={25} color={theme.colors.red} />
+                    </S.TableActionButton>
                   </S.TableTbodyActions>
                 </S.TableTbodyItem>
               </tr>

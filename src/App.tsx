@@ -7,7 +7,7 @@ import { ThemeProvider } from 'styled-components';
 import Dashboard from './components/Dashboard';
 import Header from './components/Header';
 import NewTransitionModal from './components/TransactionModal';
-import TransactionModalProvider from './contexts/TransactionModalContext';
+import TransactionModalProvider from './hooks/useModal';
 import TransactionProvider from './hooks/useTransactions';
 import { GlobalStyle } from './styles/global';
 import { theme } from './styles/theme';
