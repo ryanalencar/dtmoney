@@ -17,5 +17,5 @@ export interface ITransactionProviderProps {
 
 export interface ItransactionContextData {
   transactions: ITransaction[];
-  createTransaction: (transaction: TransactionInput) => void;
+  createTransaction: (transaction: TransactionInput) => Promise<void>;
 }

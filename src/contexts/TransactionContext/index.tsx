@@ -22,9 +22,13 @@ export default function TransactionProvider({
       .then((res) => setTransactions(res.data.transactions));
   }, []);
 
-  const createTransaction = (transaction: TransactionInput) => {
-    api.post('/transactions', transaction);
-  };
+  async function createTransaction(transaction: TransactionInput) {
+    const response = await api.post('/transactions', {
+      ...transaction,
+      createdAt: new Date(),
+    });
+    setTransactions([...transactions, response.data.transaction]);
+  }
 
   const contextValue = useMemo(
     () => ({ transactions, createTransaction }),

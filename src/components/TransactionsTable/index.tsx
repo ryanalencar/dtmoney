@@ -24,6 +24,7 @@ export default function TransactionsTable() {
               <tr key={id}>
                 <S.TableTbodyItem>{title}</S.TableTbodyItem>
                 <S.TableTbodyItem type={type}>
+                  {type === 'deposit' ? '+ ' : '- '}
                   {new Intl.NumberFormat(locale, {
                     style: 'currency',
                     currency: locale === 'pt-BR' ? 'BRL' : 'USD',
