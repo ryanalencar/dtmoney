@@ -28,9 +28,18 @@ export default function NewTransitionModal({
     setType(_type);
   };
 
-  const handleCreateNewTransaction = (e: FormEvent) => {
+  const resetModalData = () => {
+    setType('deposit');
+    setTitle('');
+    setAmount(0);
+    setCategory('');
+  };
+
+  const handleCreateNewTransaction = async (e: FormEvent) => {
     e.preventDefault();
-    createTransaction({ amount, category, title, type });
+    await createTransaction({ amount, category, title, type });
+    onRequestClose();
+    resetModalData();
   };
 
   return (
