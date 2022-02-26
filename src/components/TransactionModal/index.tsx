@@ -1,19 +1,28 @@
-import React, { FormEvent, MouseEvent, useContext, useState } from 'react';
+import React, {
+  FormEvent,
+  MouseEvent,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 
 import { useTheme } from 'styled-components';
 
 import incomeImg from '../../assets/income.svg';
 import outcomeImg from '../../assets/outcome.svg';
 import { TransactionContext } from '../../contexts/TransactionContext';
+import { TransactionModalContext } from '../../contexts/TransactionModalContext';
 import Modal from '../Modal';
 import * as S from './styles';
-import { INewTransitionModalProps, TransactionType } from './types';
+import { TransactionType } from './types';
 
-export default function NewTransitionModal({
-  isOpen,
-  onRequestClose,
-}: INewTransitionModalProps) {
+export default function NewTransitionModal() {
   const { createTransaction } = useContext(TransactionContext);
+  const { isModalOpen, toggleModal, editTransaction } = useContext(
+    TransactionModalContext,
+  );
+  const { status: isEditing, data } = editTransaction;
+
   const theme = useTheme();
   const [type, setType] = useState<TransactionType>('deposit');
   const [title, setTitle] = useState('');
@@ -35,19 +44,33 @@ export default function NewTransitionModal({
     setCategory('');
   };
 
-  const handleCreateNewTransaction = async (e: FormEvent) => {
+  useEffect(() => {
+    if (isEditing) {
+      setType(data.type);
+      setTitle(data.title);
+      setAmount(data.amount);
+      setCategory(data.category);
+    } else {
+      resetModalData();
+    }
+  }, [isEditing]);
+
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+    if (isEditing) {
+      console.log('isEditing');
+    }
     await createTransaction({ amount, category, title, type });
-    onRequestClose();
+    toggleModal();
     resetModalData();
   };
 
   return (
     <Modal
-      title="Cadastrar Transação"
-      onRequestClose={onRequestClose}
-      isOpen={isOpen}>
-      <S.FormContainer onSubmit={handleCreateNewTransaction}>
+      title={isEditing ? 'Editar Transação' : 'Cadastrar Transação'}
+      onRequestClose={toggleModal}
+      isOpen={isModalOpen}>
+      <S.FormContainer onSubmit={handleSubmit}>
         <S.FormInput
           type="text"
           placeholder="Título"
@@ -84,7 +107,9 @@ export default function NewTransitionModal({
           onChange={(e) => setCategory(e.target.value)}
         />
 
-        <S.FormSubmitButton type="submit">Cadastrar</S.FormSubmitButton>
+        <S.FormSubmitButton type="submit">
+          {isEditing ? 'Editar' : 'Cadastrar'}
+        </S.FormSubmitButton>
       </S.FormContainer>
     </Modal>
   );

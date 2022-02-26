@@ -42,3 +42,9 @@ export const TableTbodyItem = styled.td<{ type?: 'deposit' | 'withdraw' }>`
     color: ${({ theme }) => theme.colors.textTitle};
   }
 `;
+
+export const TableTbodyActions = styled.div`
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+`;

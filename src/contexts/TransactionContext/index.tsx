@@ -30,13 +30,13 @@ export default function TransactionProvider({
     setTransactions([...transactions, response.data.transaction]);
   }
 
-  const contextValue = useMemo(
+  const providerValue = useMemo(
     () => ({ transactions, createTransaction }),
     [transactions, createTransaction],
   );
 
   return (
-    <TransactionContext.Provider value={contextValue}>
+    <TransactionContext.Provider value={providerValue}>
       {children}
     </TransactionContext.Provider>
   );

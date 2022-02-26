@@ -1,18 +1,17 @@
-import React from 'react';
+import React, { useContext } from 'react';
 
 import logoImg from '../../assets/logo.svg';
+import { TransactionModalContext } from '../../contexts/TransactionModalContext';
 import * as S from './styles';
 
-interface IHeaderProps {
-  onTransactionModalStatus: () => void;
-}
+export default function Header() {
+  const { toggleModal } = useContext(TransactionModalContext);
 
-export default function Header({ onTransactionModalStatus }: IHeaderProps) {
   return (
     <S.Container>
       <S.Content>
         <img src={logoImg} alt="dt money" />
-        <S.Button onClick={onTransactionModalStatus}>Nova transação</S.Button>
+        <S.Button onClick={toggleModal}>Nova transação</S.Button>
       </S.Content>
     </S.Container>
   );

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 
 import { createServer, Model } from 'miragejs';
 import Modal from 'react-modal';
@@ -6,8 +6,9 @@ import { ThemeProvider } from 'styled-components';
 
 import Dashboard from './components/Dashboard';
 import Header from './components/Header';
-import NewTransitionModal from './components/NewTransactionModal';
+import NewTransitionModal from './components/TransactionModal';
 import TransactionProvider from './contexts/TransactionContext';
+import TransactionModalProvider from './contexts/TransactionModalContext';
 import { GlobalStyle } from './styles/global';
 import { theme } from './styles/theme';
 
@@ -50,23 +51,15 @@ createServer({
 Modal.setAppElement('#root');
 
 export default function App() {
-  const [isTransactioModalOpen, setIsTransactioModalOpen] = useState(false);
-
-  function handleTransactionModalStatus() {
-    if (isTransactioModalOpen) setIsTransactioModalOpen(false);
-    else setIsTransactioModalOpen(true);
-  }
-
   return (
     <ThemeProvider theme={theme}>
       <TransactionProvider>
-        <Header onTransactionModalStatus={handleTransactionModalStatus} />
-        <Dashboard />
-        <NewTransitionModal
-          isOpen={isTransactioModalOpen}
-          onRequestClose={handleTransactionModalStatus}
-        />
-        <GlobalStyle />
+        <TransactionModalProvider>
+          <Header />
+          <Dashboard />
+          <NewTransitionModal />
+          <GlobalStyle />
+        </TransactionModalProvider>
       </TransactionProvider>
     </ThemeProvider>
   );
