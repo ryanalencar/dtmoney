@@ -19,4 +19,5 @@ export interface ItransactionContextData {
   transactions: ITransaction[];
   createTransaction: (transaction: TransactionInput) => Promise<void>;
   editTransaction: (transaction: ITransaction) => Promise<void>;
+  removeTransaction: (id: number) => Promise<void>;
 }

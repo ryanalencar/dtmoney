@@ -49,9 +49,19 @@ export default function TransactionProvider({
     setTransactions(newTransactions);
   }
 
+  async function removeTransaction(id: number) {
+    const response = await api.delete(`/transactions/${id}`);
+    console.log(response.data);
+  }
+
   const providerValue = useMemo(
-    () => ({ transactions, createTransaction, editTransaction }),
-    [transactions, createTransaction, editTransaction],
+    () => ({
+      transactions,
+      createTransaction,
+      editTransaction,
+      removeTransaction,
+    }),
+    [transactions, createTransaction, editTransaction, removeTransaction],
   );
 
   return (
