@@ -27,6 +27,7 @@ module.exports = {
     'unused-imports'
   ],
   rules: {
+    'function-paren-newline': 'off',
     'react/jsx-curly-newline': 'off',
     'no-nested-ternary': 'off',
     'object-curly-newline': 'off',

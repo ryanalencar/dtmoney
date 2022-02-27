@@ -45,10 +45,11 @@ createServer({
       const data = JSON.parse(request.requestBody);
       return schema.create('transaction', data);
     });
-    this.put('/transactions', (schema, request) => {
-      console.log(schema);
-      console.log(JSON.parse(request.requestBody));
-      return null;
+    this.put('/transactions/:id', (schema: any, request) => {
+      const data = JSON.parse(request.requestBody);
+      const { id } = request.params;
+      const transaction = schema.transactions.find(id);
+      return transaction.update(data);
     });
   },
 });

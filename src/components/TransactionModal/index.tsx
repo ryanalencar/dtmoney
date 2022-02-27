@@ -50,7 +50,14 @@ export default function NewTransitionModal() {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (isEditing) {
-      await editTransaction({ amount, category, title, type });
+      await editTransaction({
+        id: modalData.data.id,
+        amount,
+        category,
+        title,
+        type,
+        createdAt: modalData.data.createdAt,
+      });
     } else {
       await createTransaction({ amount, category, title, type });
     }

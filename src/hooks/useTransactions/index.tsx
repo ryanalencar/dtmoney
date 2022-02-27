@@ -36,8 +36,17 @@ export default function TransactionProvider({
     setTransactions([...transactions, response.data.transaction]);
   }
 
-  async function editTransaction(transaction: TransactionInput) {
-    const response = await api.put('/transactions', transaction);
+  async function editTransaction(transaction: ITransaction) {
+    const response = await api.put(
+      `/transactions/${transaction.id}`,
+      transaction,
+    );
+    const newTransactions = transactions.map((_transaction) =>
+      _transaction.id === transaction.id
+        ? { ..._transaction, ...response.data.transaction }
+        : _transaction,
+    );
+    setTransactions(newTransactions);
   }
 
   const providerValue = useMemo(
