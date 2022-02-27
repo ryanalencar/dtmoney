@@ -11,9 +11,11 @@ export interface ITransactionModalContextData {
   modalData: ModalData;
   toggleModal: () => void;
   toggleEditModal: (data: ITransaction) => void;
+  toggleRemoveModal: () => void;
 }
 
 export interface ModalData {
   isEditing: boolean;
+  isDeleting: boolean;
   data: ITransaction;
 }
