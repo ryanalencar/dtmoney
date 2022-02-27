@@ -17,24 +17,44 @@ export default function TransactionModalProvider({
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalData, setModalData] = useState<ModalData>({
     isEditing: false,
+    isDeleting: false,
     data: {} as ITransaction,
   });
 
   function toggleModal() {
     if (isModalOpen) {
       setIsModalOpen(false);
-      setModalData({ isEditing: false, data: {} as ITransaction });
+      setModalData({
+        isEditing: false,
+        isDeleting: false,
+        data: {} as ITransaction,
+      });
     } else setIsModalOpen(true);
   }
 
   function toggleEditModal(data: ITransaction) {
     toggleModal();
-    setModalData({ isEditing: true, data });
+    setModalData({ isEditing: true, isDeleting: false, data });
+  }
+
+  function toggleRemoveModal(transactioId: number) {
+    toggleModal();
+    setModalData({
+      isEditing: false,
+      isDeleting: true,
+      data: { id: transactioId } as ITransaction,
+    });
   }
 
   const providerValue = useMemo(
-    () => ({ isModalOpen, toggleModal, toggleEditModal, modalData }),
-    [isModalOpen, toggleModal, toggleEditModal, modalData],
+    () => ({
+      isModalOpen,
+      toggleModal,
+      toggleEditModal,
+      toggleRemoveModal,
+      modalData,
+    }),
+    [isModalOpen, toggleModal, toggleEditModal, toggleRemoveModal, modalData],
   );
 
   return (

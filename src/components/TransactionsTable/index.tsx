@@ -10,7 +10,7 @@ import * as S from './styles';
 
 export default function TransactionsTable() {
   const { transactions } = useTransactions();
-  const { toggleEditModal } = useModal();
+  const { toggleEditModal, toggleRemoveModal } = useModal();
   const theme = useTheme();
 
   return (
@@ -53,7 +53,7 @@ export default function TransactionsTable() {
                       }>
                       <AiOutlineEdit size={25} color={theme.colors.blueLight} />
                     </S.TableActionButton>
-                    <S.TableActionButton>
+                    <S.TableActionButton onClick={() => toggleRemoveModal(id)}>
                       <AiOutlineDelete size={25} color={theme.colors.red} />
                     </S.TableActionButton>
                   </S.TableTbodyActions>

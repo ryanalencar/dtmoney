@@ -24,11 +24,12 @@ export const FormInput = styled.input`
   }
 `;
 
-export const FormSubmitButton = styled.button`
+export const FormSubmitButton = styled.button<{ isDeleting?: boolean }>`
   width: 100%;
   padding: 0 1.5rem;
   height: 4rem;
-  background-color: ${({ theme }) => theme.colors.green};
+  background-color: ${({ theme, isDeleting }) =>
+    isDeleting ? theme.colors.red : theme.colors.green};
   border: 0;
   margin-top: 1.5rem;
 

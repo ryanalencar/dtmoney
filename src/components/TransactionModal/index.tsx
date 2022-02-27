@@ -11,9 +11,10 @@ import * as S from './styles';
 import { TransactionType } from './types';
 
 export default function NewTransitionModal() {
-  const { createTransaction, editTransaction } = useTransactions();
-  const { isModalOpen, toggleModal, modalData } = useModal();
-  const { isEditing, data } = modalData;
+  const { createTransaction, editTransaction, removeTransaction } =
+    useTransactions();
+  const { isModalOpen, toggleModal, toggleRemoveModal, modalData } = useModal();
+  const { isEditing, isDeleting, data } = modalData;
 
   const theme = useTheme();
   const [type, setType] = useState<TransactionType>('deposit');
@@ -58,9 +59,12 @@ export default function NewTransitionModal() {
         type,
         createdAt: modalData.data.createdAt,
       });
+    } else if (isDeleting) {
+      removeTransaction(modalData.data.id);
     } else {
       await createTransaction({ amount, category, title, type });
     }
+    console.log(modalData.data);
     toggleModal();
     resetModalData();
   };
@@ -71,45 +75,56 @@ export default function NewTransitionModal() {
       onRequestClose={toggleModal}
       isOpen={isModalOpen}>
       <S.FormContainer onSubmit={handleSubmit}>
-        <S.FormInput
-          type="text"
-          placeholder="Título"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <S.FormInput
-          type="number"
-          placeholder="Valor"
-          value={amount}
-          onChange={(e) => setAmount(Number(e.target.value))}
-        />
-        <S.TransactionTypeWrapper>
-          <S.TransactionTypeButton
-            onClick={(e) => handleTransactionTypeChange(e, 'deposit')}
-            isActive={type === 'deposit'}
-            activeColor={theme.colors.green}>
-            <img src={incomeImg} alt="Entrada" />
-            <span>Entrada</span>
-          </S.TransactionTypeButton>
-          <S.TransactionTypeButton
-            onClick={(e) => handleTransactionTypeChange(e, 'withdraw')}
-            isActive={type === 'withdraw'}
-            activeColor={theme.colors.red}>
-            <img src={outcomeImg} alt="Saída" />
-            <span>Saída</span>
-          </S.TransactionTypeButton>
-        </S.TransactionTypeWrapper>
+        {isDeleting ? (
+          <>
+            <h1>Certeza que deseja remover a transação?</h1>
+            <S.FormSubmitButton isDeleting type="submit">
+              Remover
+            </S.FormSubmitButton>
+          </>
+        ) : (
+          <>
+            <S.FormInput
+              type="text"
+              placeholder="Título"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
+            <S.FormInput
+              type="number"
+              placeholder="Valor"
+              value={amount}
+              onChange={(e) => setAmount(Number(e.target.value))}
+            />
+            <S.TransactionTypeWrapper>
+              <S.TransactionTypeButton
+                onClick={(e) => handleTransactionTypeChange(e, 'deposit')}
+                isActive={type === 'deposit'}
+                activeColor={theme.colors.green}>
+                <img src={incomeImg} alt="Entrada" />
+                <span>Entrada</span>
+              </S.TransactionTypeButton>
+              <S.TransactionTypeButton
+                onClick={(e) => handleTransactionTypeChange(e, 'withdraw')}
+                isActive={type === 'withdraw'}
+                activeColor={theme.colors.red}>
+                <img src={outcomeImg} alt="Saída" />
+                <span>Saída</span>
+              </S.TransactionTypeButton>
+            </S.TransactionTypeWrapper>
 
-        <S.FormInput
-          type="text"
-          placeholder="Categoria"
-          value={category}
-          onChange={(e) => setCategory(e.target.value)}
-        />
+            <S.FormInput
+              type="text"
+              placeholder="Categoria"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+            />
 
-        <S.FormSubmitButton type="submit">
-          {isEditing ? 'Editar' : 'Cadastrar'}
-        </S.FormSubmitButton>
+            <S.FormSubmitButton type="submit">
+              {isEditing ? 'Editar' : 'Cadastrar'}
+            </S.FormSubmitButton>
+          </>
+        )}
       </S.FormContainer>
     </Modal>
   );
