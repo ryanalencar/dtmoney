@@ -1,11 +1,17 @@
-import React, { FormEvent, MouseEvent, useEffect, useState } from 'react';
+import React, { MouseEvent, useEffect, useRef, useState } from 'react';
 
+import { FormHandles } from '@unform/core';
+import { Form } from '@unform/web';
 import { useTheme } from 'styled-components';
+import * as Yup from 'yup';
 
 import incomeImg from '../../assets/income.svg';
 import outcomeImg from '../../assets/outcome.svg';
 import { useModal } from '../../hooks/useModal';
 import { useTransactions } from '../../hooks/useTransactions';
+import { TransactionInput } from '../../hooks/useTransactions/types';
+import Input from '../Input';
+import { InputLabel } from '../Input/styles';
 import Modal from '../Modal';
 import * as S from './styles';
 import { TransactionType } from './types';
@@ -18,10 +24,9 @@ export default function NewTransitionModal() {
 
   const theme = useTheme();
   const [type, setType] = useState<TransactionType>('deposit');
-  const [title, setTitle] = useState('');
-  const [amount, setAmount] = useState(0);
-  const [category, setCategory] = useState('');
   const [modalTitle, setModalTitle] = useState('');
+
+  const formRef = useRef<FormHandles>(null);
 
   const handleTransactionTypeChange = (
     e: MouseEvent,
@@ -30,24 +35,6 @@ export default function NewTransitionModal() {
     e.preventDefault();
     setType(_type);
   };
-
-  const resetModalData = () => {
-    setType('deposit');
-    setTitle('');
-    setAmount(0);
-    setCategory('');
-  };
-
-  useEffect(() => {
-    if (isEditing) {
-      setType(data.type);
-      setTitle(data.title);
-      setAmount(data.amount);
-      setCategory(data.category);
-    } else {
-      resetModalData();
-    }
-  }, [isEditing]);
 
   useEffect(() => {
     if (isEditing) {
@@ -60,51 +47,77 @@ export default function NewTransitionModal() {
     }
   }, [isEditing, isDeleting]);
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-    if (isEditing) {
-      await editTransaction({
-        id: modalData.data.id,
-        amount,
-        category,
-        title,
-        type,
-        createdAt: modalData.data.createdAt,
+  const handleSubmit = async (
+    formData: TransactionInput,
+    { reset }: { reset: () => void },
+  ) => {
+    try {
+      const schema = Yup.object().shape({
+        title: Yup.string().required('O título é obrigatório'),
+        category: Yup.string().required('A categoria é obrigatória'),
+        amount: Yup.number().required('O valor é obrigatório'),
       });
-    } else if (isDeleting) {
-      removeTransaction(modalData.data.id);
-    } else {
-      await createTransaction({ amount, category, title, type });
+
+      await schema.validate(formData, { abortEarly: false });
+
+      if (isEditing) {
+        await editTransaction({
+          ...formData,
+          id: data.id,
+          type,
+          createdAt: data.createdAt,
+        });
+      } else {
+        const formattedData = {
+          ...formData,
+          type,
+        };
+        await createTransaction(formattedData);
+      }
+      toggleModal();
+      reset();
+    } catch (err) {
+      if (err instanceof Yup.ValidationError) {
+        const errorMessages: any = {};
+        err.inner.forEach((error) => {
+          errorMessages[error.path!] = error.message;
+        });
+        formRef.current?.setErrors(errorMessages);
+      }
     }
-    console.log(modalData.data);
-    toggleModal();
-    resetModalData();
   };
 
   return (
     <Modal title={modalTitle} onRequestClose={toggleModal} isOpen={isModalOpen}>
-      <S.FormContainer onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit} initialData={data} ref={formRef}>
         {isDeleting ? (
           <>
             <h1>Certeza que deseja remover a transação?</h1>
-            <S.FormSubmitButton isDeleting type="submit">
+            <S.FormSubmitButton
+              isDeleting
+              onClick={() => {
+                removeTransaction(modalData.data.id);
+                toggleModal();
+              }}
+              type="button">
               Remover
             </S.FormSubmitButton>
           </>
         ) : (
           <>
-            <S.FormInput
+            <Input
               type="text"
+              name="title"
+              label="Título"
               placeholder="Título"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
             />
-            <S.FormInput
+            <Input
               type="number"
+              name="amount"
+              label="Valor"
               placeholder="Valor"
-              value={amount}
-              onChange={(e) => setAmount(Number(e.target.value))}
             />
+            <InputLabel>Tipo</InputLabel>
             <S.TransactionTypeWrapper>
               <S.TransactionTypeButton
                 onClick={(e) => handleTransactionTypeChange(e, 'deposit')}
@@ -122,11 +135,11 @@ export default function NewTransitionModal() {
               </S.TransactionTypeButton>
             </S.TransactionTypeWrapper>
 
-            <S.FormInput
+            <Input
               type="text"
+              name="category"
+              label="Categoria"
               placeholder="Categoria"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
             />
 
             <S.FormSubmitButton type="submit">
@@ -134,7 +147,7 @@ export default function NewTransitionModal() {
             </S.FormSubmitButton>
           </>
         )}
-      </S.FormContainer>
+      </Form>
     </Modal>
   );
 }

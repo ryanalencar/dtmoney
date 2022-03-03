@@ -27,6 +27,7 @@ module.exports = {
     'unused-imports'
   ],
   rules: {
+    '@typescript-eslint/indent': 'warn',
     'function-paren-newline': 'off',
     'react/jsx-curly-newline': 'off',
     'no-nested-ternary': 'off',
