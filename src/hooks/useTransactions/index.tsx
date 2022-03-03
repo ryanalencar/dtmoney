@@ -1,12 +1,7 @@
-import React, {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from 'react';
+import React, { createContext, useContext, useEffect, useMemo } from 'react';
 
 import { api } from '../../services/api';
+import { useLocalStorage } from '../useLocalStorage';
 import {
   ITransaction,
   ItransactionContextData,
@@ -21,7 +16,11 @@ const TransactionContext = createContext<ItransactionContextData>(
 export default function TransactionProvider({
   children,
 }: ITransactionProviderProps) {
-  const [transactions, setTransactions] = useState<ITransaction[]>([]);
+  const [transactions, setTransactions] = useLocalStorage<ITransaction[]>(
+    'transactions',
+    [],
+  );
+
   useEffect(() => {
     api
       .get('transactions')
@@ -56,7 +55,6 @@ export default function TransactionProvider({
         (_transaction) => _transaction.id !== id,
       );
       setTransactions(newTransactions);
-      console.log(newTransactions);
     }
   }
 
