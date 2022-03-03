@@ -21,6 +21,7 @@ export default function NewTransitionModal() {
   const [title, setTitle] = useState('');
   const [amount, setAmount] = useState(0);
   const [category, setCategory] = useState('');
+  const [modalTitle, setModalTitle] = useState('');
 
   const handleTransactionTypeChange = (
     e: MouseEvent,
@@ -48,6 +49,17 @@ export default function NewTransitionModal() {
     }
   }, [isEditing]);
 
+  useEffect(() => {
+    if (isEditing) {
+      setModalTitle('Editar Transação');
+    }
+    if (isDeleting) {
+      setModalTitle('Remover Transação');
+    } else {
+      setModalTitle('Cadastrar Transação');
+    }
+  }, [isEditing, isDeleting]);
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (isEditing) {
@@ -70,10 +82,7 @@ export default function NewTransitionModal() {
   };
 
   return (
-    <Modal
-      title={isEditing ? 'Editar Transação' : 'Cadastrar Transação'}
-      onRequestClose={toggleModal}
-      isOpen={isModalOpen}>
+    <Modal title={modalTitle} onRequestClose={toggleModal} isOpen={isModalOpen}>
       <S.FormContainer onSubmit={handleSubmit}>
         {isDeleting ? (
           <>
