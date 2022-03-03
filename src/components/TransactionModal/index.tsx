@@ -55,7 +55,7 @@ export default function NewTransitionModal() {
       const schema = Yup.object().shape({
         title: Yup.string().required('O título é obrigatório'),
         category: Yup.string().required('A categoria é obrigatória'),
-        amount: Yup.number().required('O valor é obrigatório'),
+        amount: Yup.string().required('O valor é obrigatório'),
       });
 
       await schema.validate(formData, { abortEarly: false });
